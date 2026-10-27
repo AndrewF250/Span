@@ -1,0 +1,15 @@
+[Unit]
+Description=Span host
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/span host
+StateDirectory=span
+Environment=SPAN_DATA_DIR=/var/lib/span
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

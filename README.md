@@ -14,6 +14,26 @@ iPhone и iPad как периферия компьютера: камера, м�
 - [Решения](docs/adr/README.md)
 - [Протокол](protocol/spec.md)
 
+## Установка
+
+Хост на Ubuntu 22.04+ или Debian 12+:
+
+```bash
+./scripts/install-host.sh
+span doctor
+span self-test
+span host
+```
+
+iPhone и iPad ставятся только с Mac. На этой машине нет Xcode и подключённого устройства. На Mac:
+
+```bash
+./scripts/install-ios.sh legacy
+./scripts/install-ios.sh modern
+```
+
+Legacy — Xcode 13.4, iOS 9. Modern — Xcode 15, iOS 15 / iPadOS 15.
+
 ## Проверка
 
 Нужны Rust stable и `protoc`.
