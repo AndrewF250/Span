@@ -4,11 +4,13 @@
 
 ## Сборка iOS
 
-Xcode 12 не ставит deployment target ниже iOS 9, Xcode 14 — ниже iOS 11. Сборка iOS 8.0 armv7+arm64 возможна Xcode 11.7 на macOS 10.15. App Store такой бинарник не принимает. Распространение Legacy — sideload, enterprise или jailbreak.
+Пол продукта на устройстве — iOS 9.0 для Legacy и iOS 15 / iPadOS 15 для Store и Advanced. Имени iPadOS 9 нет. Устройств, которые умеют iOS 8 и не умеют iOS 9, нет, поэтому iOS 8 не поддерживается.
+
+Legacy собирает Xcode 13.4 на macOS 12: deployment target iOS 9, архитектуры armv7 и arm64. Xcode 14 не собирает armv7 и не ставит цель ниже iOS 11. Xcode 15 не ставит цель ниже iOS 12. App Store бинарник Legacy не принимает. Распространение — sideload, enterprise или jailbreak.
 
 Swift в агенте не используется. Общий код — Objective-C и C.
 
-`@available`, сцены `UIScene` и `UIStackView` в Legacy недоступны: сцены с iOS 13, `UIStackView` с iOS 9. Сетка пульта на iOS 8 строится на Auto Layout и `UICollectionView` (оба есть с iOS 6).
+`UIScene` в Legacy нет: сцены начинаются с iOS 13. `UIStackView` на iOS 9 уже есть. На iPad с Split View экран Extend закрепляется ключом `UIRequiresFullScreen`.
 
 ## Захват и кодирование
 
@@ -30,7 +32,7 @@ Swift в агенте не используется. Общий код — Objec
 | Локальная сеть, `NSBonjourServices` | iOS 14 |
 | Developer Mode для XCTest-раннера | iOS 16 |
 
-4K на iOS 8 недостижим. Потолок лучших устройств этой линии — 1080p.
+4K на iOS 9 недостижим. Потолок лучших устройств этой линии — 1080p.
 
 Камера после сворачивания для App Store не обещается. `UIBackgroundModes: audio` удерживает микрофон. Видеозахват система может оборвать. В Store-сборке флаг фона камеры выключен. В sideload он экспериментальный и подписан предупреждением.
 
@@ -70,6 +72,6 @@ mDNS на Windows 10 1607 системным API не закрывался. Пр
 | evdi, v4l2loopback | вне дерева ядра | Secure Boot требует MOK |
 | HEVC в Media Foundation | расширение из магазина Microsoft | не у каждого Windows 10; интерфейс говорит об этом |
 
-OpenGL ES 2.0 — рендерер Extend на iOS 8, включая armv7. Metal есть с iOS 8 только на A7 и новее.
+OpenGL ES 2.0 — рендерер Extend на Legacy, включая armv7. Metal на этой линии есть с A7: iPhone 5s, iPad Air, iPad mini 2 и новее.
 
 Задержка glass-to-glass 30 мс на панели 60 Гц не является гарантией: один кадр уже 16,7 мс. В интерфейсе показывается измерение.

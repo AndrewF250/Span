@@ -72,7 +72,8 @@ pub fn local_advertisement(caps: u64) -> u64 {
     caps & !MIRROR_AIRPLAY
 }
 
-/// iOS 8 builds have no HEVC encoder, ReplayKit, or impact haptics.
+/// Legacy builds target iOS 9. They have no HEVC encoder, no live ReplayKit
+/// capture, and no impact haptics.
 pub fn legacy_forbidden() -> u64 {
     MIRROR_REPLAYKIT | CODEC_HEVC | HAPTIC_IMPACT | MIRROR_AIRPLAY
 }

@@ -2,6 +2,8 @@
 
 Span соединяет устройство и компьютер в локальной сети или по кабелю. Устройство — агент на Objective-C. Общая логика хоста — Rust. Оболочки Windows и Linux тонкие.
 
+Пол версий: iOS 9.0 на Legacy, iOS 15 и iPadOS 15 на Store и Advanced, Windows 10 1809, Ubuntu 22.04 и Debian 12. Подробности — в [ADR 0009](adr/0009-legacy-floor-ios9.md) и [ADR 0003](adr/0003-host-floor.md).
+
 ```mermaid
 flowchart LR
   subgraph device [Устройство]

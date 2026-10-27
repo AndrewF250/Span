@@ -10,3 +10,4 @@
 | [0006](0006-v1-slice.md) | принято | Первое демо: камера по USB и пульт |
 | [0007](0007-linux-desktops.md) | принято | GNOME on Xorg и KDE Plasma X11 |
 | [0008](0008-wire-security.md) | принято | TLS, медиаключ, HID usage, пресеты |
+| [0009](0009-legacy-floor-ios9.md) | принято | Пол Legacy — iOS 9.0, не iOS 8 |

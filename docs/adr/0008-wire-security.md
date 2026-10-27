@@ -5,7 +5,7 @@
 
 ## Контекст
 
-QUIC и Network.framework на iOS 8 отсутствуют. Публичный CommonCrypto на iOS 8 даёт AES-CBC. AES-GCM в CommonCrypto — приватный заголовок, CryptoKit начинается с iOS 13. usbmux пробрасывает только TCP. Скан-коды Windows не переносятся на Linux.
+QUIC и Network.framework на iOS 9 отсутствуют: Network.framework начинается с iOS 12. Публичный CommonCrypto на iOS 9 даёт AES-CBC. AES-GCM в нём — приватный заголовок, CryptoKit начинается с iOS 13. usbmux пробрасывает только TCP. Скан-коды Windows не переносятся на Linux.
 
 ## Решение
 

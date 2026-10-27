@@ -1,6 +1,6 @@
 //! Media key derivation and ChaCha20-Poly1305.
 //!
-//! The control channel is TLS 1.2. iOS 8 does not have a public AES-GCM API
+//! The control channel is TLS 1.2. iOS 9 does not have a public AES-GCM API
 //! and its TLS exporter is not part of the contract, so the media key is
 //! derived inside the already authenticated session. Sequence numbers are
 //! AEAD nonces: the session must not reuse a sequence on the same key.
