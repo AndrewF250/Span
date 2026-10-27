@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+members = [
+    "host-core/crates/span-protocol",
+    "host-core/crates/span-host",
+    "tools/span-fuzzer",
+]
+
+[workspace.package]
+edition = "2021"
+license = "MIT"
+publish = false
+rust-version = "1.85"

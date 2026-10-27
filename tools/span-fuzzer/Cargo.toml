@@ -1,0 +1,15 @@
+[package]
+name = "span-fuzzer"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+description = "Feeds arbitrary bytes to Span parsers and checks that they stay panic-free."
+
+[[bin]]
+name = "span-fuzzer"
+path = "src/main.rs"
+
+[dependencies]
+span-protocol = { path = "../../host-core/crates/span-protocol" }

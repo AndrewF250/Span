@@ -1,0 +1,73 @@
+name: Span
+options:
+  bundleIdPrefix: local.span
+  deploymentTarget:
+    iOS: "9.0"
+settings:
+  CLANG_ENABLE_OBJC_ARC: YES
+  CODE_SIGN_STYLE: Automatic
+targets:
+  Span-Legacy:
+    type: application
+    platform: iOS
+    deploymentTarget: "9.0"
+    sources:
+      - Sources
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: local.span.legacy
+      TARGETED_DEVICE_FAMILY: "1,2"
+      ARCHS: armv7 arm64
+      VALID_ARCHS: armv7 arm64
+      ONLY_ACTIVE_ARCH: NO
+      IPHONEOS_DEPLOYMENT_TARGET: "9.0"
+      GCC_PREPROCESSOR_DEFINITIONS: SPAN_LEGACY=1
+    info:
+      path: Info.plist
+      properties:
+        CFBundleDisplayName: Span
+        UILaunchStoryboardName: ""
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIRequiresFullScreen: true
+        NSLocalNetworkUsageDescription: Span ищет компьютер Span в локальной сети.
+        NSBonjourServices:
+          - _span._tcp
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+  Span-Modern:
+    type: application
+    platform: iOS
+    deploymentTarget: "15.0"
+    sources:
+      - Sources
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: local.span.modern
+      TARGETED_DEVICE_FAMILY: "1,2"
+      IPHONEOS_DEPLOYMENT_TARGET: "15.0"
+      ARCHS: arm64
+    info:
+      path: Info.plist
+      properties:
+        CFBundleDisplayName: Span
+        UILaunchStoryboardName: ""
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIRequiresFullScreen: true
+        NSLocalNetworkUsageDescription: Span ищет компьютер Span в локальной сети.
+        NSBonjourServices:
+          - _span._tcp
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+schemes:
+  Span-Legacy:
+    build:
+      targets:
+        Span-Legacy: all
+  Span-Modern:
+    build:
+      targets:
+        Span-Modern: all

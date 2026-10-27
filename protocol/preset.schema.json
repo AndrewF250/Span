@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://span.local/protocol/preset.schema.json",
+  "title": "Span panel preset",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "name", "columns", "rows", "controls"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9._-]{0,63}$" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 48 },
+    "locale": { "enum": ["ru", "en"] },
+    "columns": { "type": "integer", "minimum": 1, "maximum": 8 },
+    "rows": { "type": "integer", "minimum": 1, "maximum": 8 },
+    "controls": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/control" }
+    }
+  },
+  "$defs": {
+    "placement": {
+      "type": "object",
+      "required": ["id", "row", "col", "rowSpan", "colSpan", "label"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9_-]{0,31}$" },
+        "row": { "type": "integer", "minimum": 0 },
+        "col": { "type": "integer", "minimum": 0 },
+        "rowSpan": { "type": "integer", "minimum": 1 },
+        "colSpan": { "type": "integer", "minimum": 1 },
+        "label": { "type": "string", "minLength": 1, "maxLength": 48 }
+      }
+    },
+    "control": {
+      "oneOf": [
+        {
+          "allOf": [
+            { "$ref": "#/$defs/placement" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["type", "gestures"],
+              "properties": {
+                "type": { "const": "button" },
+                "id": true,
+                "row": true,
+                "col": true,
+                "rowSpan": true,
+                "colSpan": true,
+                "label": true,
+                "gestures": { "$ref": "#/$defs/gestures" }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "#/$defs/placement" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["type", "output"],
+              "properties": {
+                "type": { "const": "pad" },
+                "id": true,
+                "row": true,
+                "col": true,
+                "rowSpan": true,
+                "colSpan": true,
+                "label": true,
+                "output": { "enum": ["mouse", "scroll"] }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "#/$defs/placement" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["type", "output"],
+              "properties": {
+                "type": { "const": "joystick" },
+                "id": true,
+                "row": true,
+                "col": true,
+                "rowSpan": true,
+                "colSpan": true,
+                "label": true,
+                "output": { "enum": ["mouse", "wasd"] }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "#/$defs/placement" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["type", "output"],
+              "properties": {
+                "type": { "const": "wheel" },
+                "id": true,
+                "row": true,
+                "col": true,
+                "rowSpan": true,
+                "colSpan": true,
+                "label": true,
+                "output": { "enum": ["scroll", "volume"] }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "#/$defs/placement" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["type", "output"],
+              "properties": {
+                "type": { "const": "slider" },
+                "id": true,
+                "row": true,
+                "col": true,
+                "rowSpan": true,
+                "colSpan": true,
+                "label": true,
+                "output": { "enum": ["volume"] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "gestures": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "tap": { "$ref": "#/$defs/action" },
+        "doubleTap": { "$ref": "#/$defs/action" },
+        "longPress": { "$ref": "#/$defs/action" },
+        "swipeUp": { "$ref": "#/$defs/action" },
+        "swipeDown": { "$ref": "#/$defs/action" },
+        "swipeLeft": { "$ref": "#/$defs/action" },
+        "swipeRight": { "$ref": "#/$defs/action" }
+      }
+    },
+    "action": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "keys"],
+          "properties": {
+            "type": { "const": "hotkey" },
+            "keys": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 6,
+              "uniqueItems": true,
+              "items": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "ms"],
+          "properties": {
+            "type": { "const": "delay" },
+            "ms": { "type": "integer", "minimum": 1, "maximum": 10000 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "steps"],
+          "properties": {
+            "type": { "const": "sequence" },
+            "steps": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/$defs/action" }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "anyOf": [{ "required": ["windows"] }, { "required": ["linux"] }],
+          "properties": {
+            "type": { "const": "launch" },
+            "windows": { "type": "string", "minLength": 1, "maxLength": 4096 },
+            "linux": { "type": "string", "minLength": 1, "maxLength": 4096 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "command"],
+          "properties": {
+            "type": { "const": "media" },
+            "command": {
+              "enum": ["play", "pause", "next", "previous", "volumeUp", "volumeDown", "mute"]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "id"],
+          "properties": {
+            "type": { "const": "script" },
+            "id": { "type": "string", "pattern": "^[a-z][a-z0-9._-]{0,63}$" }
+          }
+        }
+      ]
+    }
+  }
+}

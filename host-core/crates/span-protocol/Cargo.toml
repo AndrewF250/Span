@@ -1,0 +1,21 @@
+[package]
+name = "span-protocol"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+description = "Span session protocol: framing, media packets, pairing offers, and preset documents."
+
+[dependencies]
+chacha20poly1305 = "0.10"
+data-encoding = "2.6"
+hkdf = "0.12"
+prost = "0.13"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha2 = "0.10"
+thiserror = "1.0"
+
+[build-dependencies]
+prost-build = "0.13"
