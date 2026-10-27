@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "example.browser",
+  "name": "Browser",
+  "locale": "en",
+  "columns": 4,
+  "rows": 2,
+  "controls": [
+    {
+      "type": "button",
+      "id": "back",
+      "row": 0,
+      "col": 0,
+      "rowSpan": 1,
+      "colSpan": 1,
+      "label": "Back",
+      "gestures": {
+        "tap": { "type": "hotkey", "keys": ["AltLeft", "ArrowLeft"] }
+      }
+    },
+    {
+      "type": "pad",
+      "id": "pad",
+      "row": 0,
+      "col": 1,
+      "rowSpan": 2,
+      "colSpan": 2,
+      "label": "Pad",
+      "output": "mouse"
+    },
+    {
+      "type": "slider",
+      "id": "volume",
+      "row": 1,
+      "col": 3,
+      "rowSpan": 1,
+      "colSpan": 1,
+      "label": "Vol",
+      "output": "volume"
+    }
+  ]
+}

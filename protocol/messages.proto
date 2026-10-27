@@ -1,0 +1,237 @@
+syntax = "proto3";
+
+// Wire types for the Span control channel.
+// Numeric message ids are not protobuf tags; they are the u16 values in
+// protocol/spec.md and must stay stable for the life of protocol major 1.
+package span;
+
+enum Role {
+  ROLE_UNSPECIFIED = 0;
+  ROLE_HOST = 1;
+  ROLE_DEVICE = 2;
+}
+
+enum Codec {
+  CODEC_UNSPECIFIED = 0;
+  CODEC_H264 = 1;
+  CODEC_HEVC = 2;
+  CODEC_RAW_NV12 = 3;
+  CODEC_PCM_S16LE = 4;
+  CODEC_OPUS = 5;
+}
+
+message CodecInfo {
+  Codec codec = 1;
+  uint32 profile = 2;
+}
+
+message Hello {
+  uint32 protocol_major = 1;
+  uint32 protocol_minor = 2;
+  Role role = 3;
+  bytes device_id = 4;
+  string display_name = 5;
+  uint64 capabilities = 6;
+  uint32 max_video_width = 7;
+  uint32 max_video_height = 8;
+  uint32 max_fps = 9;
+  repeated CodecInfo codecs = 10;
+  bytes resume_token = 11;
+}
+
+message HelloAck {
+  uint32 protocol_major = 1;
+  uint32 protocol_minor = 2;
+  uint64 capabilities = 3;
+  bytes session_id = 4;
+  bytes resume_token = 5;
+  uint32 udp_port = 6;
+}
+
+message KeyConfirm {
+  bytes nonce = 1;
+}
+
+message MediaPath {
+  uint32 udp_port = 1;
+}
+
+enum Failure {
+  FAILURE_UNSPECIFIED = 0;
+  FAILURE_VERSION = 1;
+  FAILURE_PIN_MISMATCH = 2;
+  FAILURE_BUSY = 3;
+  FAILURE_UNSUPPORTED = 4;
+  FAILURE_UNKNOWN_CONTROL = 5;
+  FAILURE_BAD_STREAM = 6;
+  FAILURE_NOT_ACCEPTED = 7;
+}
+
+message Reject {
+  Failure code = 1;
+  string detail = 2;
+}
+
+message Ping {
+  uint64 cookie = 1;
+  uint64 sender_us = 2;
+}
+
+message Pong {
+  uint64 cookie = 1;
+  uint64 sender_us = 2;
+  uint64 echo_us = 3;
+}
+
+message ClockSync {
+  uint64 seq = 1;
+  uint64 t0_sender_us = 2;
+}
+
+message ClockSyncReply {
+  uint64 seq = 1;
+  uint64 t0_sender_us = 2;
+  uint64 t1_receiver_us = 3;
+  uint64 t2_receiver_us = 4;
+}
+
+message VideoParams {
+  Codec codec = 1;
+  uint32 width = 2;
+  uint32 height = 3;
+  uint32 fps = 4;
+  uint32 bitrate_bps = 5;
+}
+
+message AudioParams {
+  Codec codec = 1;
+  uint32 sample_rate = 2;
+  uint32 channels = 3;
+}
+
+enum StreamDir {
+  STREAM_DIR_UNSPECIFIED = 0;
+  STREAM_DIR_FROM_DEVICE = 1;
+  STREAM_DIR_FROM_HOST = 2;
+}
+
+enum StreamKind {
+  STREAM_KIND_UNSPECIFIED = 0;
+  STREAM_KIND_CAMERA = 1;
+  STREAM_KIND_MICROPHONE = 2;
+  STREAM_KIND_MIRROR = 3;
+  STREAM_KIND_EXTEND = 4;
+  STREAM_KIND_DESKTOP_AUDIO = 5;
+}
+
+message StreamOpen {
+  uint32 stream_id = 1;
+  StreamDir direction = 2;
+  StreamKind kind = 3;
+  VideoParams video = 4;
+  AudioParams audio = 5;
+}
+
+message StreamOpenAck {
+  uint32 stream_id = 1;
+  VideoParams video = 2;
+  AudioParams audio = 3;
+}
+
+enum Close {
+  CLOSE_UNSPECIFIED = 0;
+  CLOSE_USER = 1;
+  CLOSE_REPLACED = 2;
+  CLOSE_ERROR = 3;
+}
+
+message StreamClose {
+  uint32 stream_id = 1;
+  Close reason = 2;
+}
+
+message KeyframeRequest {
+  uint32 stream_id = 1;
+}
+
+enum InputKind {
+  INPUT_KIND_UNSPECIFIED = 0;
+  INPUT_KIND_KEY = 1;
+  INPUT_KIND_POINTER = 2;
+  INPUT_KIND_AXIS = 3;
+}
+
+message KeyEvent {
+  uint32 usage_page = 1;
+  uint32 usage = 2;
+  bool pressed = 3;
+}
+
+enum PointerPhase {
+  POINTER_PHASE_UNSPECIFIED = 0;
+  POINTER_PHASE_DOWN = 1;
+  POINTER_PHASE_MOVE = 2;
+  POINTER_PHASE_UP = 3;
+  POINTER_PHASE_CANCEL = 4;
+  POINTER_PHASE_WHEEL = 5;
+}
+
+message PointerEvent {
+  uint32 pointer_id = 1;
+  PointerPhase phase = 2;
+  float x_norm = 3;
+  float y_norm = 4;
+  float wheel = 5;
+  uint32 surface_id = 6;
+}
+
+message AxisEvent {
+  string control_id = 1;
+  float x = 2;
+  float y = 3;
+}
+
+message InputEvent {
+  uint64 event_us = 1;
+  InputKind kind = 2;
+  KeyEvent key = 3;
+  PointerEvent pointer = 4;
+  AxisEvent axis = 5;
+}
+
+message PanelLayout {
+  uint32 revision = 1;
+  bytes document_json = 2;
+}
+
+enum Gesture {
+  GESTURE_UNSPECIFIED = 0;
+  GESTURE_TAP = 1;
+  GESTURE_DOUBLE_TAP = 2;
+  GESTURE_LONG_PRESS = 3;
+  GESTURE_SWIPE_UP = 4;
+  GESTURE_SWIPE_DOWN = 5;
+  GESTURE_SWIPE_LEFT = 6;
+  GESTURE_SWIPE_RIGHT = 7;
+}
+
+message MacroInvoke {
+  string preset_id = 1;
+  string control_id = 2;
+  Gesture gesture = 3;
+}
+
+message CapabilitiesChanged {
+  uint64 capabilities = 1;
+}
+
+enum Bye {
+  BYE_UNSPECIFIED = 0;
+  BYE_USER = 1;
+  BYE_REPLACED = 2;
+  BYE_ERROR = 3;
+}
+
+message Disconnect {
+  Bye reason = 1;
+}
